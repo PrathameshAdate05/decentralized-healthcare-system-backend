@@ -20,10 +20,10 @@ public class CustomChemistIdGenerator implements IdentifierGenerator {
             sharedSessionContractImplementor.doWork(connection -> {
                 try {
                     Statement statement = connection.createStatement();
-                    ResultSet resultSet = statement.executeQuery("select chemistId from chemist");
+                    ResultSet resultSet = statement.executeQuery("select chemist_id from chemist");
 
                     while (resultSet.next()){
-                        set.add(resultSet.getString("chemistId"));
+                        set.add(resultSet.getString("chemist_id"));
                     }
 
 

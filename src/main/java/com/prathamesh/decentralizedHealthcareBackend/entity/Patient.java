@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.repository.Temporal;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -35,6 +36,7 @@ public class Patient {
 
     String contact;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     Date DOB;
 
     Integer age;

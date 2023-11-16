@@ -25,10 +25,10 @@ public class CustomHospitalIdGenerator implements IdentifierGenerator {
             sharedSessionContractImplementor.doWork(connection -> {
                 try {
                     Statement statement = connection.createStatement();
-                    ResultSet resultSet = statement.executeQuery("select hospitalId from hospital");
+                    ResultSet resultSet = statement.executeQuery("select hospital_id from hospital");
 
                     while (resultSet.next()){
-                        set.add(resultSet.getString("hospitalId"));
+                        set.add(resultSet.getString("hospital_id"));
                     }
 
 

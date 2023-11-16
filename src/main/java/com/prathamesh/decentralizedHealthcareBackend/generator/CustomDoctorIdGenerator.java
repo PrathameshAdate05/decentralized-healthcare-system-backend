@@ -20,10 +20,10 @@ public class CustomDoctorIdGenerator implements IdentifierGenerator {
             sharedSessionContractImplementor.doWork(connection -> {
                 try {
                     Statement statement = connection.createStatement();
-                    ResultSet resultSet = statement.executeQuery("select doctorId from doctor");
+                    ResultSet resultSet = statement.executeQuery("select doctor_id from doctor");
 
                     while (resultSet.next()){
-                        set.add(resultSet.getString("doctorId"));
+                        set.add(resultSet.getString("doctor_id"));
                     }
 
 

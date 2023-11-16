@@ -20,10 +20,10 @@ public class CustomPatientIdGenerator implements IdentifierGenerator {
             sharedSessionContractImplementor.doWork(connection -> {
                 try {
                     Statement statement = connection.createStatement();
-                    ResultSet resultSet = statement.executeQuery("select patientId from patient");
+                    ResultSet resultSet = statement.executeQuery("select patient_id from patient");
 
                     while (resultSet.next()){
-                        set.add(resultSet.getString("patientId"));
+                        set.add(resultSet.getString("patient_id"));
                     }
 
 

@@ -6,4 +6,5 @@ import javax.print.Doc;
 
 public interface DoctorServiceImpl {
     public Doctor signUpDoctor(Doctor doctor);
+    public boolean loginDoctor(String id, String pass);
 }
