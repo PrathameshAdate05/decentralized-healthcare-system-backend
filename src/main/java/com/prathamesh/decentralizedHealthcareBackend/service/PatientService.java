@@ -32,4 +32,9 @@ public class PatientService implements PatientServiceImpl{
 
         return true;
     }
+
+    @Override
+    public Patient getPatientInfo(String id) {
+        return patientRepository.findFirstByPatientId(id);
+    }
 }

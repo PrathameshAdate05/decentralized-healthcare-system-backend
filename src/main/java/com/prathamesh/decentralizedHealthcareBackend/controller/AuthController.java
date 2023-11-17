@@ -49,9 +49,13 @@ public class AuthController {
 
         logger.error(token);
 
-        if (jwtHelper.validateToken(token))
-            return "Hello Spring";
+        try {
+            if (jwtHelper.validateToken(token))
+                return "Hello Spring";
 
+        }catch (Exception e){
+            return "Unauthorized";
+        }
         return "Unauthorized";
     }
 

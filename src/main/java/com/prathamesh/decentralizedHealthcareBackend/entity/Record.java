@@ -3,6 +3,7 @@ package com.prathamesh.decentralizedHealthcareBackend.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.Reference;
 
 import java.io.Serializable;
 import java.util.Date;

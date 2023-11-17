@@ -19,7 +19,7 @@ public class Prescription implements Serializable {
 
     String pid;
 
-    List<String> medicines;
+    List<Medicine> medicines;
 
     String patientId;
 
