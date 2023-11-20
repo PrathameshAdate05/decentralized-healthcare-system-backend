@@ -19,6 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/data")
+@CrossOrigin(origins = "http://localhost:3000")
 public class PatientController {
 
     Logger logger = LoggerFactory.getLogger(PatientController.class);
@@ -47,9 +48,7 @@ public class PatientController {
             if (jwtHelper.validateToken(token))
                 if (jwtHelper.validateToken(token)){
                     Patient patient = patientService.getPatientInfo(id);
-
                     List<RecordModel> records = recordService.getPatientRecords(id);
-
                     HashMap<String, Object> res = new HashMap<>();
                     res.put("user",patient);
                     res.put("records", records);

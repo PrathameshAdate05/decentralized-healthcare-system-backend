@@ -17,6 +17,7 @@ import java.util.HashMap;
 
 @RestController
 @RequestMapping("api/auth")
+@CrossOrigin(origins = "http://localhost:3000")
 public class AuthController {
 
     Logger logger = LoggerFactory.getLogger(AuthController.class);
@@ -203,7 +204,7 @@ public class AuthController {
             return new ResponseEntity<>(token, HttpStatus.OK);
         }
 
-        return new ResponseEntity<>("Email or Password is Invalid", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("User id or Password is Invalid", HttpStatus.BAD_REQUEST);
     }
     @PostMapping("/login/doctor")
     public ResponseEntity<Object> doctorLogin(@RequestBody HashMap<String, String> map){
@@ -215,7 +216,7 @@ public class AuthController {
             return new ResponseEntity<>(token, HttpStatus.OK);
         }
 
-        return new ResponseEntity<>("Email or Password is Invalid", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("User id or Password is Invalid", HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/login/chemist")
@@ -228,7 +229,7 @@ public class AuthController {
             return new ResponseEntity<>(token, HttpStatus.OK);
         }
 
-        return new ResponseEntity<>("Email or Password is Invalid", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("User id or Password is Invalid", HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/login/hospital")
@@ -241,7 +242,7 @@ public class AuthController {
             return new ResponseEntity<>(token, HttpStatus.OK);
         }
 
-        return new ResponseEntity<>("Email or Password is Invalid", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("User id or Password is Invalid", HttpStatus.BAD_REQUEST);
     }
 
 
