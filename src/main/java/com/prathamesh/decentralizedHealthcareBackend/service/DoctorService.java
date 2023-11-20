@@ -31,4 +31,11 @@ public class DoctorService implements DoctorServiceImpl{
 
         return true;
     }
+
+    @Override
+    public Doctor getDoctorInfo(String id) {
+        return doctorRepository.findFirstByDoctorId(id);
+    }
+
+
 }
