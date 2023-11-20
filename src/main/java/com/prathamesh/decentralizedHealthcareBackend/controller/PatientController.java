@@ -74,7 +74,7 @@ public class PatientController {
         logger.error(token);
 
         try {
-                if (token == null && jwtHelper.validateToken(token)){
+                if (token != null && jwtHelper.validateToken(token)){
 
                     Prescription p = recordModel.getPrescription();
                     p.setPid(RandomStringUtils.randomNumeric(10));
