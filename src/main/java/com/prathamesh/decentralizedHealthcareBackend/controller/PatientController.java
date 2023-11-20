@@ -48,6 +48,10 @@ public class PatientController {
             if (jwtHelper.validateToken(token))
                 if (jwtHelper.validateToken(token)){
                     Patient patient = patientService.getPatientInfo(id);
+
+                    if (patient == null)
+                        return new ResponseEntity<>("Patient not Found", HttpStatus.BAD_REQUEST);
+
                     List<RecordModel> records = recordService.getPatientRecords(id);
                     HashMap<String, Object> res = new HashMap<>();
                     res.put("user",patient);
