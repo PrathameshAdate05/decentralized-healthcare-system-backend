@@ -69,6 +69,10 @@ public class PatientController {
 
     @PostMapping("/patient/add-record")
     public ResponseEntity<Object> addRecord(@RequestHeader("Authorization") HashMap<String, String> map, @RequestBody RecordModel recordModel){
+
+        if (map.get("authorization") == null)
+            return new ResponseEntity<>("Access Denied", HttpStatus.UNAUTHORIZED);
+
         String token = map.get("authorization").substring(7);
 
         logger.error(token);
