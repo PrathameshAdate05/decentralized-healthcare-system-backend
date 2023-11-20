@@ -40,6 +40,9 @@ public class PatientController {
     @GetMapping("/patient/{id}")
     public ResponseEntity<Object> getPatient(@RequestHeader("Authorization") HashMap<String, String> map, @PathVariable String id){
 
+        if (map.get("authorization") == null)
+            return new ResponseEntity<>("Access Denied", HttpStatus.UNAUTHORIZED);
+
         String token = map.get("authorization").substring(7);
 
         logger.error(token);
@@ -78,7 +81,7 @@ public class PatientController {
         logger.error(token);
 
         try {
-                if (token != null && jwtHelper.validateToken(token)){
+                if (jwtHelper.validateToken(token)){
 
                     Prescription p = recordModel.getPrescription();
                     p.setPid(RandomStringUtils.randomNumeric(10));
@@ -99,6 +102,10 @@ public class PatientController {
 
     @GetMapping ("/patient/records/{id}")
     public ResponseEntity<Object> getRecords(@RequestHeader("Authorization") HashMap<String, String> map, @PathVariable String id){
+
+        if (map.get("authorization") == null)
+            return new ResponseEntity<>("Access Denied", HttpStatus.UNAUTHORIZED);
+
         String token = map.get("authorization").substring(7);
 
         logger.error(token);

@@ -27,4 +27,9 @@ public class HospitalService implements HospitalServiceImpl{
 
         return true;
     }
+
+    @Override
+    public Hospital getHospitalInfo(String id) {
+        return hospitalRepository.findFirstByHospitalId(id);
+    }
 }

@@ -1,49 +1,45 @@
 package com.prathamesh.decentralizedHealthcareBackend.controller;
 
-import com.prathamesh.decentralizedHealthcareBackend.entity.Doctor;
-import com.prathamesh.decentralizedHealthcareBackend.entity.RecordModel;
-import com.prathamesh.decentralizedHealthcareBackend.service.DoctorService;
+
+import com.prathamesh.decentralizedHealthcareBackend.entity.Hospital;
+import com.prathamesh.decentralizedHealthcareBackend.service.HospitalService;
 import com.prathamesh.decentralizedHealthcareBackend.util.JwtHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 
 @RestController
-@RequestMapping("api/doctor")
+@RequestMapping("api/hospital")
 @CrossOrigin(origins = "http://localhost:3000")
-public class DoctorController {
-
-    Logger logger = LoggerFactory.getLogger(DoctorController.class);
+public class HospitalController {
 
     @Autowired
-    DoctorService doctorService;
+    HospitalService hospitalService;
 
     @Autowired
     JwtHelper jwtHelper;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getDoctorInfo(@RequestHeader("Authorization") HashMap<String, String> map, @PathVariable String id){
+    public ResponseEntity<Object> getHospitalInfo(@RequestHeader("Authorization") HashMap<String, String> map, @PathVariable String id){
         if (map.get("authorization") == null)
             return new ResponseEntity<>("Access Denied", HttpStatus.UNAUTHORIZED);
 
         String token = map.get("authorization").substring(7);
 
-        logger.error(token);
+
 
         try {
             if (jwtHelper.validateToken(token)){
-                Doctor doctor = doctorService.getDoctorInfo(id);
 
-                if (doctor == null)
-                        return new ResponseEntity<>("Doctor Not Found!!!", HttpStatus.BAD_REQUEST);
+                Hospital hospital = hospitalService.getHospitalInfo(id);
 
-                return new ResponseEntity<>(doctor, HttpStatus.OK);
+                if (hospital == null)
+                    return new ResponseEntity<>("Hospital Not Found!!!", HttpStatus.BAD_REQUEST);
+
+                return new ResponseEntity<>(hospital, HttpStatus.OK);
             }
 
         }catch (Exception e) {
