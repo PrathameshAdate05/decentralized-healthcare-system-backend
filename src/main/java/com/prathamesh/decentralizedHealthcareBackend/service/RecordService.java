@@ -1,8 +1,12 @@
 package com.prathamesh.decentralizedHealthcareBackend.service;
 
 import com.prathamesh.decentralizedHealthcareBackend.config.IPFSConfig;
+import com.prathamesh.decentralizedHealthcareBackend.entity.Doctor;
+import com.prathamesh.decentralizedHealthcareBackend.entity.Hospital;
 import com.prathamesh.decentralizedHealthcareBackend.entity.Record;
 import com.prathamesh.decentralizedHealthcareBackend.entity.RecordModel;
+import com.prathamesh.decentralizedHealthcareBackend.repository.DoctorRepository;
+import com.prathamesh.decentralizedHealthcareBackend.repository.HospitalRepository;
 import com.prathamesh.decentralizedHealthcareBackend.repository.RecordRepository;
 import io.ipfs.api.IPFS;
 import io.ipfs.api.MerkleNode;
@@ -29,6 +33,12 @@ public class RecordService implements RecordServiceImpl{
 
     @Autowired
     RecordRepository recordRepository;
+
+    @Autowired
+    DoctorRepository doctorRepository;
+
+    @Autowired
+    HospitalRepository hospitalRepository;
 
     @Override
     public RecordModel saveRecord(RecordModel recordModel) {
@@ -95,6 +105,13 @@ public class RecordService implements RecordServiceImpl{
                 ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
 
                 RecordModel recordModel = (RecordModel) objectInputStream.readObject();
+
+                Doctor doctor = doctorRepository.findFirstByDoctorId(recordModel.getDoctorId());
+
+                Hospital hospital = hospitalRepository.findFirstByHospitalId(recordModel.getHospitalId());
+
+                recordModel.setDoctor(doctor);
+                recordModel.setHospital(hospital);
 
                records.add(recordModel);
 

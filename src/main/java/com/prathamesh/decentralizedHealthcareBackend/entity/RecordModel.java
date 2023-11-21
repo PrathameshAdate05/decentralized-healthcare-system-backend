@@ -27,4 +27,8 @@ public class RecordModel implements Serializable {
     Date admissionDate;
 
     Date dischargeDate;
+
+    transient Doctor doctor;
+
+    transient Hospital hospital;
 }
