@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -44,6 +45,9 @@ public class RecordService implements RecordServiceImpl{
     public RecordModel saveRecord(RecordModel recordModel) {
 
         String filename = String.format("%s.%s", RandomStringUtils.randomAlphanumeric(10),"ser" );
+
+        LocalDateTime localDateTime = LocalDateTime.now();
+        recordModel.setCreatedAt(String.valueOf(localDateTime));
 
         Record record = new Record();
         record.setPatientId(recordModel.getPatientId());

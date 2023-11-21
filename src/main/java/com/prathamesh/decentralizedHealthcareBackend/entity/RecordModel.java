@@ -31,4 +31,6 @@ public class RecordModel implements Serializable {
     transient Doctor doctor;
 
     transient Hospital hospital;
+
+    String createdAt;
 }
