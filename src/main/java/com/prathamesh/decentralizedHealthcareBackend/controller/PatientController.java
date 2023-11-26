@@ -34,12 +34,12 @@ public class PatientController {
     RecordService recordService;
 
     @GetMapping("/test")
-    public String test(){
+    public String test() {
         return "Hello Spring";
     }
 
     @GetMapping("/patient/{id}")
-    public ResponseEntity<Object> getPatient(@RequestHeader("Authorization") HashMap<String, String> map, @PathVariable String id){
+    public ResponseEntity<Object> getPatient(@RequestHeader("Authorization") HashMap<String, String> map, @PathVariable String id) {
 
         if (map.get("authorization") == null)
             return new ResponseEntity<>("Access Denied", HttpStatus.UNAUTHORIZED);
@@ -49,21 +49,21 @@ public class PatientController {
         logger.error(token);
 
         try {
-                if (jwtHelper.validateToken(token)){
-                    Patient patient = patientService.getPatientInfo(id);
+            if (jwtHelper.validateToken(token)) {
+                Patient patient = patientService.getPatientInfo(id);
 
-                    if (patient == null)
-                        return new ResponseEntity<>("Patient not Found", HttpStatus.BAD_REQUEST);
+                if (patient == null)
+                    return new ResponseEntity<>("Patient not Found", HttpStatus.BAD_REQUEST);
 
-                    List<RecordModel> records = recordService.getPatientRecords(id);
-                    HashMap<String, Object> res = new HashMap<>();
-                    res.put("user",patient);
-                    res.put("records", records);
+                List<RecordModel> records = recordService.getPatientRecords(id);
+                HashMap<String, Object> res = new HashMap<>();
+                res.put("user", patient);
+                res.put("records", records);
 
-                    return new ResponseEntity<>(res, HttpStatus.OK);
-                }
+                return new ResponseEntity<>(res, HttpStatus.OK);
+            }
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             logger.error("some exception happen here");
             e.printStackTrace();
             return new ResponseEntity<>("Access Denied", HttpStatus.UNAUTHORIZED);
@@ -73,7 +73,7 @@ public class PatientController {
     }
 
     @PostMapping("/patient/add-record")
-    public ResponseEntity<Object> addRecord(@RequestHeader("Authorization") HashMap<String, String> map, @RequestBody RecordModel recordModel){
+    public ResponseEntity<Object> addRecord(@RequestHeader("Authorization") HashMap<String, String> map, @RequestBody RecordModel recordModel) {
 
         if (map.get("authorization") == null)
             return new ResponseEntity<>("Access Denied", HttpStatus.UNAUTHORIZED);
@@ -83,27 +83,39 @@ public class PatientController {
         logger.error(token);
 
         try {
-                if (jwtHelper.validateToken(token)){
+            if (jwtHelper.validateToken(token)) {
 
+                if (recordModel.getPatientId().isEmpty())
+                    return new ResponseEntity<>("Patient ID can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (recordModel.getDoctorId().isEmpty())
+                    return new ResponseEntity<>("Doctor ID can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (recordModel.getHospitalId().isEmpty())
+                    return new ResponseEntity<>("Hospital ID can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (recordModel.getDiagnosis().isEmpty())
+                    return new ResponseEntity<>("Diagnosis can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (recordModel.getDescription().isEmpty())
+                    return new ResponseEntity<>("Description can't be empty.", HttpStatus.BAD_REQUEST);
+                else {
                     Prescription p = recordModel.getPrescription();
                     p.setPid(RandomStringUtils.randomNumeric(10));
                     recordModel.setPrescription(p);
 
                     RecordModel temp = recordService.saveRecord(recordModel);
 
-
-                   return new ResponseEntity<>(temp, HttpStatus.OK);
+                    return new ResponseEntity<>(temp, HttpStatus.OK);
                 }
 
-        }catch (Exception e) {
+            }
+
+        } catch (Exception e) {
             return new ResponseEntity<>("Access Denied", HttpStatus.UNAUTHORIZED);
         }
 
         return new ResponseEntity<>("Access Denied", HttpStatus.UNAUTHORIZED);
     }
 
-    @GetMapping ("/patient/records/{id}")
-    public ResponseEntity<Object> getRecords(@RequestHeader("Authorization") HashMap<String, String> map, @PathVariable String id){
+    @GetMapping("/patient/records/{id}")
+    public ResponseEntity<Object> getRecords(@RequestHeader("Authorization") HashMap<String, String> map, @PathVariable String id) {
 
         if (map.get("authorization") == null)
             return new ResponseEntity<>("Access Denied", HttpStatus.UNAUTHORIZED);
@@ -113,13 +125,13 @@ public class PatientController {
         logger.error(token);
 
         try {
-            if (jwtHelper.validateToken(token)){
+            if (jwtHelper.validateToken(token)) {
                 logger.error("comes here");
                 List<RecordModel> records = recordService.getPatientRecords(id);
                 return new ResponseEntity<>(records, HttpStatus.OK);
             }
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             return new ResponseEntity<>("Access Denied", HttpStatus.UNAUTHORIZED);
         }
 
