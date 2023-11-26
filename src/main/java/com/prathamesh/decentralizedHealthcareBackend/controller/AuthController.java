@@ -135,8 +135,6 @@ public class AuthController {
                     return new ResponseEntity<>("Contact No can't be empty.", HttpStatus.BAD_REQUEST);
                 else if (patient.getContact().length() != 10)
                     return new ResponseEntity<>("Enter valid Contact No", HttpStatus.BAD_REQUEST);
-                else if (patient.getDOB().toString().isEmpty())
-                    return new ResponseEntity<>("Date can't be empty.", HttpStatus.BAD_REQUEST);
                 else if (patient.getGender().isEmpty())
                     return new ResponseEntity<>("Gender can't be empty.", HttpStatus.BAD_REQUEST);
                 else if (patient.getPincode().isEmpty())
@@ -185,23 +183,57 @@ public class AuthController {
 
         try {
             if (jwtHelper.validateToken(token)) {
-                Doctor temp = doctorService.signUpDoctor(doctor);
 
-                AuthDTO authDTO = new AuthDTO();
-                authDTO.setUsername(temp.getDoctorId());
-                authDTO.setRole("DOCTOR");
-                authDTO.setPassword(temp.getPassword());
+                if (doctor.getFirstName().isEmpty())
+                    return new ResponseEntity<>("First Name can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (doctor.getMiddleName().isEmpty())
+                    return new ResponseEntity<>("Middle Name can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (doctor.getLastName().isEmpty())
+                    return new ResponseEntity<>("Last Name can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (doctor.getEmail().isEmpty())
+                    return new ResponseEntity<>("Email can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (doctor.getPassword().isEmpty())
+                    return new ResponseEntity<>("Password can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (doctor.getContact().isEmpty())
+                    return new ResponseEntity<>("Contact No can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (doctor.getQualification().isEmpty())
+                    return new ResponseEntity<>("Qualification can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (doctor.getAge() <= 0)
+                    return new ResponseEntity<>("Enter valid age.", HttpStatus.BAD_REQUEST);
+                else if (doctor.getGender().isEmpty())
+                    return new ResponseEntity<>("Gender can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (doctor.getAddress().isEmpty())
+                    return new ResponseEntity<>("Address can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (doctor.getCity().isEmpty())
+                    return new ResponseEntity<>("City can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (doctor.getState().isEmpty())
+                    return new ResponseEntity<>("State can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (doctor.getCountry().isEmpty())
+                    return new ResponseEntity<>("Country can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (doctor.getPincode().isEmpty())
+                    return new ResponseEntity<>("PinCode can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (doctor.getContact().length() != 10)
+                    return new ResponseEntity<>("Enter valid Contact No.", HttpStatus.BAD_REQUEST);
+                else {
+                    Doctor temp = doctorService.signUpDoctor(doctor);
 
-                authService.signUpAuth(authDTO);
+                    AuthDTO authDTO = new AuthDTO();
+                    authDTO.setUsername(temp.getDoctorId());
+                    authDTO.setRole("DOCTOR");
+                    authDTO.setPassword(temp.getPassword());
 
-                HashMap<Object, Object> res = new HashMap<>();
+                    authService.signUpAuth(authDTO);
 
-                res.put("status", "success");
-                res.put("user", temp);
+                    HashMap<Object, Object> res = new HashMap<>();
+
+                    res.put("status", "success");
+                    res.put("user", temp);
 
 
-                if (temp != null) {
-                    return new ResponseEntity<>(res, HttpStatus.OK);
+                    if (temp != null) {
+                        return new ResponseEntity<>(res, HttpStatus.OK);
+                    }
+
                 }
 
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -228,22 +260,53 @@ public class AuthController {
 
         try {
             if (jwtHelper.validateToken(token)) {
-                Chemist temp = chemistService.signUpChemist(chemist);
 
-                AuthDTO authDTO = new AuthDTO();
-                authDTO.setUsername(temp.getChemistId());
-                authDTO.setRole("CHEMIST");
-                authDTO.setPassword(temp.getPassword());
+                if (chemist.getFirstName().isEmpty())
+                    return new ResponseEntity<>("First Name can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (chemist.getMiddleName().isEmpty())
+                    return new ResponseEntity<>("Middle Name can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (chemist.getLastName().isEmpty())
+                    return new ResponseEntity<>("Last Name can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (chemist.getEmail().isEmpty())
+                    return new ResponseEntity<>("Email can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (chemist.getPassword().isEmpty())
+                    return new ResponseEntity<>("Password can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (chemist.getContact().isEmpty())
+                    return new ResponseEntity<>("Contact No can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (chemist.getQualification().isEmpty())
+                    return new ResponseEntity<>("Qualification can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (chemist.getAddress().isEmpty())
+                    return new ResponseEntity<>("Address can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (chemist.getCity().isEmpty())
+                    return new ResponseEntity<>("City can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (chemist.getState().isEmpty())
+                    return new ResponseEntity<>("State can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (chemist.getCountry().isEmpty())
+                    return new ResponseEntity<>("Country can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (chemist.getPincode().isEmpty())
+                    return new ResponseEntity<>("PinCode can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (chemist.getContact().length() != 10)
+                    return new ResponseEntity<>("Enter valid Contact No.", HttpStatus.BAD_REQUEST);
+                else if (chemist.getShopName().isEmpty())
+                    return new ResponseEntity<>("Shop Name can't be empty.", HttpStatus.BAD_REQUEST);
+                else {
+                    Chemist temp = chemistService.signUpChemist(chemist);
 
-                authService.signUpAuth(authDTO);
+                    AuthDTO authDTO = new AuthDTO();
+                    authDTO.setUsername(temp.getChemistId());
+                    authDTO.setRole("CHEMIST");
+                    authDTO.setPassword(temp.getPassword());
 
-                HashMap<Object, Object> res = new HashMap<>();
+                    authService.signUpAuth(authDTO);
 
-                res.put("status", "success");
-                res.put("user", temp);
+                    HashMap<Object, Object> res = new HashMap<>();
 
-                if (temp != null) {
-                    return new ResponseEntity<>(res, HttpStatus.OK);
+                    res.put("status", "success");
+                    res.put("user", temp);
+
+                    if (temp != null) {
+                        return new ResponseEntity<>(res, HttpStatus.OK);
+                    }
                 }
 
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -270,22 +333,47 @@ public class AuthController {
 
         try {
             if (jwtHelper.validateToken(token)) {
-                Hospital temp = hospitalService.signUpHospital(hospital);
 
-                AuthDTO authDTO = new AuthDTO();
-                authDTO.setUsername(temp.getHospitalId());
-                authDTO.setRole("HOSPITAL");
-                authDTO.setPassword(temp.getPassword());
+                if (hospital.getName().isEmpty())
+                    return new ResponseEntity<>("Hospital Name can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (hospital.getEmail().isEmpty())
+                    return new ResponseEntity<>("Email can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (hospital.getPassword().isEmpty())
+                    return new ResponseEntity<>("Password can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (hospital.getContact().isEmpty())
+                    return new ResponseEntity<>("Contact No can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (hospital.getAddress().isEmpty())
+                    return new ResponseEntity<>("Address can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (hospital.getCity().isEmpty())
+                    return new ResponseEntity<>("City can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (hospital.getState().isEmpty())
+                    return new ResponseEntity<>("State can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (hospital.getCountry().isEmpty())
+                    return new ResponseEntity<>("Country can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (hospital.getPincode().isEmpty())
+                    return new ResponseEntity<>("PinCode can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (hospital.getContact().length() != 10)
+                    return new ResponseEntity<>("Enter valid Contact No.", HttpStatus.BAD_REQUEST);
+                else if (hospital.getType().isEmpty())
+                    return new ResponseEntity<>("Hospital Type can't be empty.", HttpStatus.BAD_REQUEST);
+                else {
+                    Hospital temp = hospitalService.signUpHospital(hospital);
 
-                authService.signUpAuth(authDTO);
+                    AuthDTO authDTO = new AuthDTO();
+                    authDTO.setUsername(temp.getHospitalId());
+                    authDTO.setRole("HOSPITAL");
+                    authDTO.setPassword(temp.getPassword());
 
-                HashMap<Object, Object> res = new HashMap<>();
+                    authService.signUpAuth(authDTO);
 
-                res.put("status", "success");
-                res.put("user", temp);
+                    HashMap<Object, Object> res = new HashMap<>();
 
-                if (temp != null) {
-                    return new ResponseEntity<>(res, HttpStatus.OK);
+                    res.put("status", "success");
+                    res.put("user", temp);
+
+                    if (temp != null) {
+                        return new ResponseEntity<>(res, HttpStatus.OK);
+                    }
                 }
 
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

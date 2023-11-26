@@ -59,7 +59,7 @@ public class JwtHelper {
                 .setClaims(claims)
                 .setSubject(userName)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+1000*600*30))
+                .setExpiration(new Date(System.currentTimeMillis()+1000*60*300))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
     }
 
