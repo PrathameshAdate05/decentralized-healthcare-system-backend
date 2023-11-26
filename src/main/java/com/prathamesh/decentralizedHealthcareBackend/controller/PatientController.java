@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,7 +49,6 @@ public class PatientController {
         logger.error(token);
 
         try {
-            if (jwtHelper.validateToken(token))
                 if (jwtHelper.validateToken(token)){
                     Patient patient = patientService.getPatientInfo(id);
 
@@ -64,6 +64,8 @@ public class PatientController {
                 }
 
         }catch (Exception e) {
+            logger.error("some exception happen here");
+            e.printStackTrace();
             return new ResponseEntity<>("Access Denied", HttpStatus.UNAUTHORIZED);
         }
 

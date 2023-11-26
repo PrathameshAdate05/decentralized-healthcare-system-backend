@@ -43,7 +43,7 @@ public class AuthController {
     JwtHelper jwtHelper;
 
     @PostMapping("/test")
-    public String test(@RequestHeader("Authorization")HashMap<String, String> map){
+    public String test(@RequestHeader("Authorization") HashMap<String, String> map) {
 
 
         String token = map.get("authorization").substring(7);
@@ -54,37 +54,52 @@ public class AuthController {
             if (jwtHelper.validateToken(token))
                 return "Hello Spring";
 
-        }catch (Exception e){
+        } catch (Exception e) {
             return "Unauthorized";
         }
         return "Unauthorized";
     }
 
     @PostMapping("/signup/admin")
-    public ResponseEntity<Object> adminSignUp(@RequestBody Admin admin){
-        Admin temp = adminService.signUpAdmin(admin);
+    public ResponseEntity<Object> adminSignUp(@RequestBody Admin admin) {
 
-        AuthDTO authDTO = new AuthDTO();
-        authDTO.setUsername(temp.getId());
-        authDTO.setRole("ADMIN");
-        authDTO.setPassword(temp.getPassword());
+        if (admin.getFirstName().isEmpty())
+            return new ResponseEntity<>("First Name can't be empty.", HttpStatus.BAD_REQUEST);
+        else if (admin.getMiddleName().isEmpty())
+            return new ResponseEntity<>("Middle Name can't be empty.", HttpStatus.BAD_REQUEST);
+        else if (admin.getLastName().isEmpty())
+            return new ResponseEntity<>("Last Name can't be empty.", HttpStatus.BAD_REQUEST);
+        else if (admin.getEmail().isEmpty())
+            return new ResponseEntity<>("Email can't be empty.", HttpStatus.BAD_REQUEST);
+        else if (admin.getPassword().isEmpty())
+            return new ResponseEntity<>("Password can't be empty.", HttpStatus.BAD_REQUEST);
+        else if (admin.getContact().isEmpty())
+            return new ResponseEntity<>("Contact No can't be empty.", HttpStatus.BAD_REQUEST);
+        else {
+            Admin temp = adminService.signUpAdmin(admin);
 
-        authService.signUpAuth(authDTO);
+            AuthDTO authDTO = new AuthDTO();
+            authDTO.setUsername(temp.getId());
+            authDTO.setRole("ADMIN");
+            authDTO.setPassword(temp.getPassword());
 
-        HashMap<Object, Object> res = new HashMap<>();
+            authService.signUpAuth(authDTO);
 
-        res.put("status","success");
-        res.put("user",temp);
+            HashMap<Object, Object> res = new HashMap<>();
 
-        if (temp != null){
-            return new ResponseEntity<>(res, HttpStatus.OK);
+            res.put("status", "success");
+            res.put("user", temp);
+
+            if (temp != null) {
+                return new ResponseEntity<>(res, HttpStatus.OK);
+            }
         }
 
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/signup/patient")
-    public ResponseEntity<Object> patientSignUp(@RequestBody Patient patient, @RequestHeader("Authorization") HashMap<String, String> map){
+    public ResponseEntity<Object> patientSignUp(@RequestBody Patient patient, @RequestHeader("Authorization") HashMap<String, String> map) {
 
         if (map.get("authorization") == null)
             return new ResponseEntity<>("Access Denied", HttpStatus.UNAUTHORIZED);
@@ -94,29 +109,62 @@ public class AuthController {
         logger.error(token);
 
         try {
-            if (jwtHelper.validateToken(token)){
+            if (jwtHelper.validateToken(token)) {
 
-                Patient temp = patientService.signUpPatient(patient);
-                AuthDTO authDTO = new AuthDTO();
-                authDTO.setUsername(temp.getPatientId());
-                authDTO.setRole("PATIENT");
-                authDTO.setPassword(temp.getPassword());
+                if (patient.getEmail().isEmpty())
+                    return new ResponseEntity<>("Email can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (patient.getPassword().isEmpty())
+                    return new ResponseEntity<>("Password can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (patient.getFirstName().isEmpty())
+                    return new ResponseEntity<>("First Name can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (patient.getLastName().isEmpty())
+                    return new ResponseEntity<>("Last Name can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (patient.getAge() <= 0)
+                    return new ResponseEntity<>("Enter valid Age.", HttpStatus.BAD_REQUEST);
+                else if (patient.getAddress().isEmpty())
+                    return new ResponseEntity<>("Address can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (patient.getCity().isEmpty())
+                    return new ResponseEntity<>("City can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (patient.getState().isEmpty())
+                    return new ResponseEntity<>("State can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (patient.getCountry().isEmpty())
+                    return new ResponseEntity<>("Country can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (patient.getMiddleName().isEmpty())
+                    return new ResponseEntity<>("Middle Name can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (patient.getContact().isEmpty())
+                    return new ResponseEntity<>("Contact No can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (patient.getContact().length() != 10)
+                    return new ResponseEntity<>("Enter valid Contact No", HttpStatus.BAD_REQUEST);
+                else if (patient.getDOB().toString().isEmpty())
+                    return new ResponseEntity<>("Date can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (patient.getGender().isEmpty())
+                    return new ResponseEntity<>("Gender can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (patient.getPincode().isEmpty())
+                    return new ResponseEntity<>("Pin Code can't be empty.", HttpStatus.BAD_REQUEST);
+                else {
+                    Patient temp = patientService.signUpPatient(patient);
+                    AuthDTO authDTO = new AuthDTO();
+                    authDTO.setUsername(temp.getPatientId());
+                    authDTO.setRole("PATIENT");
+                    authDTO.setPassword(temp.getPassword());
 
-                authService.signUpAuth(authDTO);
+                    authService.signUpAuth(authDTO);
 
-                HashMap<Object, Object> res = new HashMap<>();
+                    HashMap<Object, Object> res = new HashMap<>();
 
-                res.put("status","success");
-                res.put("user",temp);
+                    res.put("status", "success");
+                    res.put("user", temp);
 
-                if (temp != null){
-                    return new ResponseEntity<>(res, HttpStatus.OK);
+                    if (temp != null) {
+                        return new ResponseEntity<>(res, HttpStatus.OK);
+                    }
+
+                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 }
 
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             return new ResponseEntity<>("Access Denied", HttpStatus.UNAUTHORIZED);
         }
 
@@ -126,7 +174,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup/doctor")
-    public ResponseEntity<Object> doctorSignUp(@RequestBody Doctor doctor, @RequestHeader("Authorization") HashMap<String, String> map){
+    public ResponseEntity<Object> doctorSignUp(@RequestBody Doctor doctor, @RequestHeader("Authorization") HashMap<String, String> map) {
 
         if (map.get("authorization") == null)
             return new ResponseEntity<>("Access Denied", HttpStatus.UNAUTHORIZED);
@@ -136,7 +184,7 @@ public class AuthController {
         logger.error(token);
 
         try {
-            if (jwtHelper.validateToken(token)){
+            if (jwtHelper.validateToken(token)) {
                 Doctor temp = doctorService.signUpDoctor(doctor);
 
                 AuthDTO authDTO = new AuthDTO();
@@ -148,18 +196,18 @@ public class AuthController {
 
                 HashMap<Object, Object> res = new HashMap<>();
 
-                res.put("status","success");
-                res.put("user",temp);
+                res.put("status", "success");
+                res.put("user", temp);
 
 
-                if (temp != null){
+                if (temp != null) {
                     return new ResponseEntity<>(res, HttpStatus.OK);
                 }
 
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             return new ResponseEntity<>("Access Denied", HttpStatus.UNAUTHORIZED);
         }
 
@@ -169,7 +217,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup/chemist")
-    public ResponseEntity<Object> chemistSignUp(@RequestBody Chemist chemist, @RequestHeader("Authorization") HashMap<String, String> map){
+    public ResponseEntity<Object> chemistSignUp(@RequestBody Chemist chemist, @RequestHeader("Authorization") HashMap<String, String> map) {
 
         if (map.get("authorization") == null)
             return new ResponseEntity<>("Access Denied", HttpStatus.UNAUTHORIZED);
@@ -179,7 +227,7 @@ public class AuthController {
         logger.error(token);
 
         try {
-            if (jwtHelper.validateToken(token)){
+            if (jwtHelper.validateToken(token)) {
                 Chemist temp = chemistService.signUpChemist(chemist);
 
                 AuthDTO authDTO = new AuthDTO();
@@ -191,17 +239,17 @@ public class AuthController {
 
                 HashMap<Object, Object> res = new HashMap<>();
 
-                res.put("status","success");
-                res.put("user",temp);
+                res.put("status", "success");
+                res.put("user", temp);
 
-                if (temp != null){
+                if (temp != null) {
                     return new ResponseEntity<>(res, HttpStatus.OK);
                 }
 
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             return new ResponseEntity<>("Access Denied", HttpStatus.UNAUTHORIZED);
         }
 
@@ -211,7 +259,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup/hospital")
-    public ResponseEntity<Object> hospitalSignUp(@RequestBody Hospital hospital, @RequestHeader("Authorization") HashMap<String, String> map){
+    public ResponseEntity<Object> hospitalSignUp(@RequestBody Hospital hospital, @RequestHeader("Authorization") HashMap<String, String> map) {
 
         if (map.get("authorization") == null)
             return new ResponseEntity<>("Access Denied", HttpStatus.UNAUTHORIZED);
@@ -221,7 +269,7 @@ public class AuthController {
         logger.error(token);
 
         try {
-            if (jwtHelper.validateToken(token)){
+            if (jwtHelper.validateToken(token)) {
                 Hospital temp = hospitalService.signUpHospital(hospital);
 
                 AuthDTO authDTO = new AuthDTO();
@@ -233,17 +281,17 @@ public class AuthController {
 
                 HashMap<Object, Object> res = new HashMap<>();
 
-                res.put("status","success");
-                res.put("user",temp);
+                res.put("status", "success");
+                res.put("user", temp);
 
-                if (temp != null){
+                if (temp != null) {
                     return new ResponseEntity<>(res, HttpStatus.OK);
                 }
 
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             return new ResponseEntity<>("Access Denied", HttpStatus.UNAUTHORIZED);
         }
 
@@ -253,12 +301,12 @@ public class AuthController {
     }
 
     @PostMapping("/login/admin")
-    public ResponseEntity<Object> adminLogin(@RequestBody HashMap<String, String> map){
-        String username  = map.get("username");
+    public ResponseEntity<Object> adminLogin(@RequestBody HashMap<String, String> map) {
+        String username = map.get("username");
         String pass = map.get("password");
-        String role  = map.get("role");
+        String role = map.get("role");
 
-        if (adminService.loginAdmin(username, pass)){
+        if (adminService.loginAdmin(username, pass)) {
             String token = jwtHelper.generateToken(username);
 
             return new ResponseEntity<>(token, HttpStatus.OK);
@@ -268,23 +316,24 @@ public class AuthController {
     }
 
     @PostMapping("/login/patient")
-    public ResponseEntity<Object> patientLogin(@RequestBody HashMap<String, String> map){
-        String username  = map.get("username");
+    public ResponseEntity<Object> patientLogin(@RequestBody HashMap<String, String> map) {
+        String username = map.get("username");
         String pass = map.get("password");
 
-        if (patientService.loginPatient(username, pass)){
+        if (patientService.loginPatient(username, pass)) {
             String token = jwtHelper.generateToken(username);
             return new ResponseEntity<>(token, HttpStatus.OK);
         }
 
         return new ResponseEntity<>("User id or Password is Invalid", HttpStatus.BAD_REQUEST);
     }
+
     @PostMapping("/login/doctor")
-    public ResponseEntity<Object> doctorLogin(@RequestBody HashMap<String, String> map){
-        String username  = map.get("username");
+    public ResponseEntity<Object> doctorLogin(@RequestBody HashMap<String, String> map) {
+        String username = map.get("username");
         String pass = map.get("password");
 
-        if (doctorService.loginDoctor(username, pass)){
+        if (doctorService.loginDoctor(username, pass)) {
             String token = jwtHelper.generateToken(username);
             return new ResponseEntity<>(token, HttpStatus.OK);
         }
@@ -293,11 +342,11 @@ public class AuthController {
     }
 
     @PostMapping("/login/chemist")
-    public ResponseEntity<Object> chemistLogin(@RequestBody HashMap<String, String> map){
-        String username  = map.get("username");
+    public ResponseEntity<Object> chemistLogin(@RequestBody HashMap<String, String> map) {
+        String username = map.get("username");
         String pass = map.get("password");
 
-        if (chemistService.loginChemist(username, pass)){
+        if (chemistService.loginChemist(username, pass)) {
             String token = jwtHelper.generateToken(username);
             return new ResponseEntity<>(token, HttpStatus.OK);
         }
@@ -306,11 +355,11 @@ public class AuthController {
     }
 
     @PostMapping("/login/hospital")
-    public ResponseEntity<Object> hospitalLogin(@RequestBody HashMap<String, String> map){
-        String username  = map.get("username");
+    public ResponseEntity<Object> hospitalLogin(@RequestBody HashMap<String, String> map) {
+        String username = map.get("username");
         String pass = map.get("password");
 
-        if (hospitalService.loginHospital(username, pass)){
+        if (hospitalService.loginHospital(username, pass)) {
             String token = jwtHelper.generateToken(username);
             return new ResponseEntity<>(token, HttpStatus.OK);
         }

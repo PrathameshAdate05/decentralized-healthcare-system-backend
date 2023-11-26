@@ -110,12 +110,7 @@ public class RecordService implements RecordServiceImpl{
 
                 RecordModel recordModel = (RecordModel) objectInputStream.readObject();
 
-                Doctor doctor = doctorRepository.findFirstByDoctorId(recordModel.getDoctorId());
 
-                Hospital hospital = hospitalRepository.findFirstByHospitalId(recordModel.getHospitalId());
-
-                recordModel.setDoctor(doctor);
-                recordModel.setHospital(hospital);
 
                records.add(recordModel);
 
