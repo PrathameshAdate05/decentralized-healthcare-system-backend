@@ -3,8 +3,10 @@ package com.prathamesh.decentralizedHealthcareBackend.controller;
 import com.prathamesh.decentralizedHealthcareBackend.dto.AuthDTO;
 import com.prathamesh.decentralizedHealthcareBackend.entity.*;
 import com.prathamesh.decentralizedHealthcareBackend.service.*;
+import com.prathamesh.decentralizedHealthcareBackend.util.Constants;
 import com.prathamesh.decentralizedHealthcareBackend.util.JwtHelper;
 
+import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.regex.Pattern;
 
 
 @RestController
@@ -71,8 +74,12 @@ public class AuthController {
             return new ResponseEntity<>("Last Name can't be empty.", HttpStatus.BAD_REQUEST);
         else if (admin.getEmail().isEmpty())
             return new ResponseEntity<>("Email can't be empty.", HttpStatus.BAD_REQUEST);
+        else if (!Pattern.matches(Constants.emailRegex, admin.getEmail()))
+            return new ResponseEntity<>("Enter Valid Email.", HttpStatus.BAD_REQUEST);
         else if (admin.getPassword().isEmpty())
             return new ResponseEntity<>("Password can't be empty.", HttpStatus.BAD_REQUEST);
+        else if (admin.getPassword().length() < 6)
+            return new ResponseEntity<>("Password must contain at least 6 characters", HttpStatus.BAD_REQUEST);
         else if (admin.getContact().isEmpty())
             return new ResponseEntity<>("Contact No can't be empty.", HttpStatus.BAD_REQUEST);
         else {
@@ -113,8 +120,12 @@ public class AuthController {
 
                 if (patient.getEmail().isEmpty())
                     return new ResponseEntity<>("Email can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (!Pattern.matches(Constants.emailRegex, patient.getEmail()))
+                    return new ResponseEntity<>("Enter Valid Email.", HttpStatus.BAD_REQUEST);
                 else if (patient.getPassword().isEmpty())
                     return new ResponseEntity<>("Password can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (patient.getPassword().length() < 6)
+                    return new ResponseEntity<>("Password must contain at least 6 characters", HttpStatus.BAD_REQUEST);
                 else if (patient.getFirstName().isEmpty())
                     return new ResponseEntity<>("First Name can't be empty.", HttpStatus.BAD_REQUEST);
                 else if (patient.getLastName().isEmpty())
@@ -192,8 +203,12 @@ public class AuthController {
                     return new ResponseEntity<>("Last Name can't be empty.", HttpStatus.BAD_REQUEST);
                 else if (doctor.getEmail().isEmpty())
                     return new ResponseEntity<>("Email can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (!Pattern.matches(Constants.emailRegex, doctor.getEmail()))
+                    return new ResponseEntity<>("Enter Valid Email.", HttpStatus.BAD_REQUEST);
                 else if (doctor.getPassword().isEmpty())
                     return new ResponseEntity<>("Password can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (doctor.getPassword().length() < 6)
+                    return new ResponseEntity<>("Password must contain at least 6 characters", HttpStatus.BAD_REQUEST);
                 else if (doctor.getContact().isEmpty())
                     return new ResponseEntity<>("Contact No can't be empty.", HttpStatus.BAD_REQUEST);
                 else if (doctor.getQualification().isEmpty())
@@ -269,8 +284,12 @@ public class AuthController {
                     return new ResponseEntity<>("Last Name can't be empty.", HttpStatus.BAD_REQUEST);
                 else if (chemist.getEmail().isEmpty())
                     return new ResponseEntity<>("Email can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (!Pattern.matches(Constants.emailRegex, chemist.getEmail()))
+                    return new ResponseEntity<>("Enter Valid Email.", HttpStatus.BAD_REQUEST);
                 else if (chemist.getPassword().isEmpty())
                     return new ResponseEntity<>("Password can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (chemist.getPassword().length() < 6)
+                    return new ResponseEntity<>("Password must contain at least 6 characters", HttpStatus.BAD_REQUEST);
                 else if (chemist.getContact().isEmpty())
                     return new ResponseEntity<>("Contact No can't be empty.", HttpStatus.BAD_REQUEST);
                 else if (chemist.getQualification().isEmpty())
@@ -338,8 +357,12 @@ public class AuthController {
                     return new ResponseEntity<>("Hospital Name can't be empty.", HttpStatus.BAD_REQUEST);
                 else if (hospital.getEmail().isEmpty())
                     return new ResponseEntity<>("Email can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (!Pattern.matches(Constants.emailRegex, hospital.getEmail()))
+                    return new ResponseEntity<>("Enter Valid Email.", HttpStatus.BAD_REQUEST);
                 else if (hospital.getPassword().isEmpty())
                     return new ResponseEntity<>("Password can't be empty.", HttpStatus.BAD_REQUEST);
+                else if (hospital.getPassword().length() < 6)
+                    return new ResponseEntity<>("Password must contain at least 6 characters", HttpStatus.BAD_REQUEST);
                 else if (hospital.getContact().isEmpty())
                     return new ResponseEntity<>("Contact No can't be empty.", HttpStatus.BAD_REQUEST);
                 else if (hospital.getAddress().isEmpty())
@@ -378,6 +401,7 @@ public class AuthController {
 
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
+
 
         } catch (Exception e) {
             return new ResponseEntity<>("Access Denied", HttpStatus.UNAUTHORIZED);
